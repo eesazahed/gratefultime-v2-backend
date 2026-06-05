@@ -74,23 +74,21 @@ docker build -t gratefultime-api .
 docker run -p 8000:8000 --env-file .env gratefultime-api
 ```
 
-## Deploy on Hack Club Nest (systemd + Caddy)
+## Deploy on Hack Club Nest (systemd only)
 
 | | |
 |-|-|
-| SSH | `eesa.hackclub.app` |
+| SSH | `eesa.hackclub.app` (as user `eesa`) |
 | URL | `https://gratefultime-v2.eesa.hackclub.app` |
-| Port | `33540` → `127.0.0.1` (Caddy reverse proxy) |
+| Port | `33540` — Nest routes subdomain directly, no Caddy |
 
 ```bash
 ssh eesa.hackclub.app
 cd ~/gratefultime-v2-backend
 ./deploy/install.sh
-# add deploy/Caddyfile.snippet to ~/Caddyfile
-systemctl --user reload caddy
 ```
 
-Full steps: `scripts/nest-deploy.md`
+systemd runs `setup.sh 33540 --service` forever. Full steps: `scripts/nest-deploy.md`
 
 Mobile `BaseUrl`: `https://gratefultime-v2.eesa.hackclub.app`
 

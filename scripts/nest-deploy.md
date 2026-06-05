@@ -1,79 +1,84 @@
-# Deploy on Hack Club Nest (systemd + Caddy)
+# Deploy on Hack Club Nest (systemd only)
+
+Nest routes `gratefultime-v2.eesa.hackclub.app` → port `33540`. No Caddy.
+
+**SSH as your Nest user (`eesa`), not root.**
 
 | Item | Value |
 |------|-------|
-| SSH | `eesa.hackclub.app` |
-| Public URL | `https://gratefultime-v2.eesa.hackclub.app` |
-| App port | `33540` (localhost only — Caddy proxies in) |
+| SSH | `ssh eesa.hackclub.app` |
+| URL | `https://gratefultime-v2.eesa.hackclub.app` |
+| Port | `33540` |
+| systemd | `gratefultime-v2-backend.service` |
 
-## 1. Supabase (browser, one-time)
+## 1. Supabase
 
-Run `supabase/schema.sql` in the Supabase SQL Editor.
+Run `supabase/schema.sql` in Supabase SQL Editor.
 
-## 2. Clone + env (SSH)
+## 2. Clone + env
 
 ```bash
-ssh eesa.hackclub.app
-git clone <your-repo-url> ~/gratefultime-v2-backend
+git clone https://github.com/eesazahed/gratefultime-v2-backend.git ~/gratefultime-v2-backend
 cd ~/gratefultime-v2-backend
 cp .env.example .env
 nano .env
 ```
 
-## 3. Install + systemd
+## 3. Install + start (systemd runs setup.sh)
 
 ```bash
-chmod +x deploy/install.sh
+chmod +x deploy/install.sh setup.sh
 ./deploy/install.sh
 ```
 
-This creates `~/.config/systemd/user/gratefultime-api.service` and starts it.
-
-Useful commands:
+Or manually:
 
 ```bash
-systemctl --user status gratefultime-api
-systemctl --user restart gratefultime-api
-journalctl --user -u gratefultime-api -f
+nano ~/.config/systemd/user/gratefultime-v2-backend.service
 ```
 
-## 4. Caddy
-
-Add the block from `deploy/Caddyfile.snippet` to your `~/Caddyfile` (or via Nest CLI if you manage domains that way):
-
-```caddy
-gratefultime-v2.eesa.hackclub.app {
-	reverse_proxy 127.0.0.1:33540
-}
-```
-
-Reload:
+Use `deploy/gratefultime-v2-backend.service`, then:
 
 ```bash
-systemctl --user reload caddy
+systemctl --user daemon-reload
+systemctl --user enable --now gratefultime-v2-backend
 ```
 
-## 5. Verify
+The service runs:
 
 ```bash
-curl -s https://gratefultime-v2.eesa.hackclub.app/api/v1/
-curl -s https://gratefultime-v2.eesa.hackclub.app/api/v1/commit
+~/gratefultime-v2-backend/setup.sh 33540 --service
 ```
 
-## 6. Mobile
+## 4. Verify
+
+```bash
+ss -tlnp | grep 33540
+
+python3 -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:33540/api/v1/').read().decode())"
+
+python3 -c "import urllib.request; print(urllib.request.urlopen('https://gratefultime-v2.eesa.hackclub.app/api/v1/').read().decode())"
+```
+
+## 5. Mobile
 
 ```typescript
 BaseUrl: "https://gratefultime-v2.eesa.hackclub.app"
 UseLiveApi: true
 ```
 
-## Deploy updates
+## Updates
 
 ```bash
-ssh eesa.hackclub.app
 cd ~/gratefultime-v2-backend
 git pull
-source .venv/bin/activate
-pip install -r requirements.txt
-systemctl --user restart gratefultime-api
+systemctl --user restart gratefultime-v2-backend
 ```
+
+## Local dev (your Mac)
+
+```bash
+./setup.sh 8000
+```
+
+Uses `--reload`. Production on Nest uses `setup.sh 33540 --service` via systemd.

@@ -1,10 +1,20 @@
 # Updates
 
+## 2026-06-05 — Nest: systemd + setup.sh, no Caddy
+
+- systemd runs `setup.sh 33540 --service` on `0.0.0.0:33540`.
+- Removed Caddy from deploy path; Nest routes subdomain to port directly.
+- `setup.sh` supports `--service` mode (no reload) for production.
+
+## 2026-06-05 — Nest systemd unit rename
+
+- Renamed service to `gratefultime-v2-backend.service` (`deploy/gratefultime-v2-backend.service`).
+- Docs: SSH as Nest user `eesa` (not root); verify with `python3` if `curl` missing.
+
 ## 2026-06-05 — Nest deploy: systemd + Caddy
 
-- Added `deploy/gratefultime-api.service`, `deploy/Caddyfile.snippet`, `deploy/install.sh`.
+- Added `deploy/Caddyfile.snippet`, `deploy/install.sh`.
 - Nest flow: systemd user service on `127.0.0.1:33540` + Caddy `reverse_proxy` + reload.
-- Removed tmux from deploy docs.
 
 ## 2026-06-05 — Health + commit endpoint
 
