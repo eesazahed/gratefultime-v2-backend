@@ -74,6 +74,29 @@ docker build -t gratefultime-api .
 docker run -p 8000:8000 --env-file .env gratefultime-api
 ```
 
-## Deploy
+## Deploy on Hack Club Nest (systemd + Caddy)
 
-Any host that runs Docker or Python 3.12+. Point the mobile app `ApiConfig.BaseUrl` at your deployed URL.
+| | |
+|-|-|
+| SSH | `eesa.hackclub.app` |
+| URL | `https://gratefultime-v2.eesa.hackclub.app` |
+| Port | `33540` → `127.0.0.1` (Caddy reverse proxy) |
+
+```bash
+ssh eesa.hackclub.app
+cd ~/gratefultime-v2-backend
+./deploy/install.sh
+# add deploy/Caddyfile.snippet to ~/Caddyfile
+systemctl --user reload caddy
+```
+
+Full steps: `scripts/nest-deploy.md`
+
+Mobile `BaseUrl`: `https://gratefultime-v2.eesa.hackclub.app`
+
+## Docker (optional)
+
+```bash
+docker build -t gratefultime-api .
+docker run -p 8000:8000 --env-file .env gratefultime-api
+```

@@ -1,0 +1,6 @@
+# Append this block to ~/Caddyfile on Nest (or merge via Nest CLI).
+# Then: systemctl --user reload caddy
+
+gratefultime-v2.eesa.hackclub.app {
+	reverse_proxy 127.0.0.1:33540
+}

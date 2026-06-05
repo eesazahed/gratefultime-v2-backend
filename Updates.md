@@ -1,5 +1,11 @@
 # Updates
 
+## 2026-06-05 — Nest deploy: systemd + Caddy
+
+- Added `deploy/gratefultime-api.service`, `deploy/Caddyfile.snippet`, `deploy/install.sh`.
+- Nest flow: systemd user service on `127.0.0.1:33540` + Caddy `reverse_proxy` + reload.
+- Removed tmux from deploy docs.
+
 ## 2026-06-05 — Health + commit endpoint
 
 - `GET /api/v1/` and `GET /health` now include `commit` (`hash`, `description`, `time`).
