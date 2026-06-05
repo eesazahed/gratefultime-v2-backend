@@ -70,9 +70,7 @@ UseLiveApi: true
 ## Updates
 
 ```bash
-cd ~/gratefultime-v2-backend
-git pull
-systemctl --user restart gratefultime-v2-backend
+~/gratefultime-v2-backend/deploy/update.sh
 ```
 
 ## Local dev (your Mac)

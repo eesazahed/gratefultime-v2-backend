@@ -1,5 +1,9 @@
 # Updates
 
+## 2026-06-05 — Nest one-line update script
+
+- Added `deploy/update.sh`: `git pull` + `systemctl --user restart gratefultime-v2-backend`.
+
 ## 2026-06-05 — Nest deploy verified
 
 - `https://gratefultime-v2.eesa.hackclub.app/api/v1/` returns health + commit `ed15f02`.
