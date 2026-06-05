@@ -6,7 +6,9 @@ After=network.target
 Type=simple
 WorkingDirectory=%h/gratefultime-v2-backend
 EnvironmentFile=%h/gratefultime-v2-backend/.env
-ExecStart=%h/gratefultime-v2-backend/setup.sh 33540 --service
+ExecStart=/bin/bash %h/gratefultime-v2-backend/setup.sh 33540 --service
+StandardOutput=journal
+StandardError=journal
 Restart=always
 RestartSec=5
 

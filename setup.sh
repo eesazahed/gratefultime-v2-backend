@@ -21,6 +21,11 @@ fi
 APP_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$APP_DIR"
 
+if [ ! -f ".env" ]; then
+  echo "Missing .env in $APP_DIR" >&2
+  exit 1
+fi
+
 PYTHON_BIN="${PYTHON_BIN:-python3.12}"
 if ! command -v "$PYTHON_BIN" >/dev/null 2>&1; then
   PYTHON_BIN="python3"
@@ -41,7 +46,8 @@ source .venv/bin/activate
 pip install -q -r requirements.txt
 
 if [ "$SERVICE_MODE" = true ]; then
-  exec uvicorn main:app \
+  echo "[gratefultime] starting uvicorn on 0.0.0.0:${PORT}" >&2
+  exec .venv/bin/uvicorn main:app \
     --host 0.0.0.0 \
     --port "$PORT" \
     --workers 1

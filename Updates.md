@@ -1,5 +1,11 @@
 # Updates
 
+## 2026-06-05 — Nest: systemd startup hardening
+
+- `setup.sh`: require `.env`, log service start, use `.venv/bin/uvicorn` explicitly.
+- `deploy/gratefultime-v2-backend.service`: `ExecStart=/bin/bash`, journal logging.
+- `.env.example`: no inline comments (systemd `EnvironmentFile` compatibility).
+
 ## 2026-06-05 — Nest: systemd + setup.sh, no Caddy
 
 - systemd runs `setup.sh 33540 --service` on `0.0.0.0:33540`.
